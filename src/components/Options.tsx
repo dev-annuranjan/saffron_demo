@@ -1,3 +1,4 @@
+import { FC, memo } from "react";
 import Option, { OptionType } from "./Option";
 
 type OptionsProps = {
@@ -7,15 +8,15 @@ type OptionsProps = {
     optionChosen: null | string;
 }
 
-export default function Options({ options, handleOptionClick, optionsOrder, optionChosen }: OptionsProps) {
-    debugger;
-    return (
-        <div style={{ background: "rgba(234, 45, 98, 0.5)", padding: "1.5rem" }}>
-            {optionsOrder.map((idx, index) => <Option
-                key={index}
-                option={options[idx]}
-                handleOptionClick={handleOptionClick} 
-                optionChosen={optionChosen}/>)}
-        </div>
-    )
+const Options: FC<OptionsProps> = ({ options, handleOptionClick, optionsOrder, optionChosen }) => {
+    return (<ul className="align-middle">
+        {optionsOrder.map((idx, index) => <Option
+            key={index}
+            index={idx}
+            option={options[idx]}
+            handleOptionClick={handleOptionClick}
+            optionChosen={optionChosen} />)}
+    </ul>)
 }
+
+export default memo(Options);

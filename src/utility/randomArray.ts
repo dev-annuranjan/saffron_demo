@@ -14,3 +14,19 @@ export function generateRandomOptionOrder(questions: any) {
     }
     return optionOrders;
 }
+
+export function formatNumber (num: number){
+    let numString = num.toString();
+    let digitCount = 0;
+    while (num > 0) {
+        digitCount++;
+        num = Math.floor(num / 10);
+    }
+    digitCount = Math.max(2, digitCount);
+   
+    if (numString.length < digitCount) {
+        numString = "0".repeat(digitCount - numString.length) + numString;
+    }
+
+    return numString;
+}

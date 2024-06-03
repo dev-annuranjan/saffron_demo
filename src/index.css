@@ -6,5 +6,28 @@
     :root {
         --color-primary: 14 71 253;
         --color-secondary: 255 255 255;
+        --color-accent1: 157 169 254;
+        --color-accent2: 216 220 235;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: var(--color-accent1)
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: var(--color-primary);
+        border-radius: 5px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-accent1)
     }
 }

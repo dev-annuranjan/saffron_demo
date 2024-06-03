@@ -1,0 +1,21 @@
+.page {
+    @apply bg-accent2 w-full h-screen text-center grid place-items-center;
+}
+
+.page-container {
+    @apply w-full h-screen md:w-96 md:max-h-[calc(100vh-4rem)] lg:w-[24rem] bg-secondary shadow-lg;
+}
+
+.button-hover-effect {
+    @apply transition duration-200 ease-in-out hover:scale-110 shadow-2xl rounded-full font-semibold;
+}
+
+progress[value]::-webkit-progress-bar {
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset
+}
+
+progress[value]::-webkit-progress-value {
+    background-color: rgb(14, 71, 253);
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+}
