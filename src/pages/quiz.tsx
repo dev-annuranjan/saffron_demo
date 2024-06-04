@@ -7,10 +7,11 @@ import Left from "../assets/left.svg";
 import Right from "../assets/right.svg";
 
 // Importing UIComponent and Types
-import Question from "../components/Question";
+import QuestionsStack, { QuestionType } from "../components/QuestionsStack";
 import Options from "../components/Options";
 import { OptionType } from "../components/Option";
 import { RootState } from "../redux/store";
+import ButtonArrow from "../components/ButtonArrow";
 
 // Importing actions from App and Quiz Slices
 import {
@@ -39,8 +40,12 @@ const Quiz: FC = () => {
 
     const dispatch = useDispatch();
 
+    // Hard Limit set for number of cards in stack is 3;
+    const [cardDataStack, setCardDataStack] = useState<QuestionType[]>(prevPage === 2 ? [questions[questionOrder[questions.length - 1]]] : [questions[questionOrder[0]], questions[questionOrder[1]], questions[questionOrder[2]]]);
+    const [questionAttempted, setQuestionAttempted] = useState<boolean>(false);
+
     useEffect(() => {
-        // Conditions cause there is no need to update the store when we are returning from the result page
+        // Condition because there is no need to update the store when we are returning from the result page
         if (!questionOrderInStore.length) {
             dispatch(setTotalScore(questions.length));
             dispatch(setOptionsChosen(new Array(questions.length).fill(null)));
@@ -56,10 +61,19 @@ const Quiz: FC = () => {
         } else {
             setQuestionNumber(prev => prev + 1);
         }
+
+        const newCardDataStack: QuestionType[] = cardDataStack.slice(1);
+        if (questionNumber + 3 < questions.length) newCardDataStack.push(questions[questionOrder[questionNumber + 3]]);
+        setCardDataStack(newCardDataStack);
     }
 
     const goToPrevQuestion = () => {
-        if (questionNumber > 0) setQuestionNumber(prev => prev - 1);
+        if (questionNumber > 0) {
+            setQuestionNumber(prev => prev - 1);
+            const newCardDataStack = [questions[questionOrder[questionNumber - 1]], ...cardDataStack];
+            if (newCardDataStack.length > 3) newCardDataStack.pop();
+            setCardDataStack(newCardDataStack);
+        }
     }
 
     const handleOptionClick = (option: OptionType) => {
@@ -68,9 +82,12 @@ const Quiz: FC = () => {
             newOptionArray[questionNumber] = option.label;
             dispatch(setOptionsChosen(newOptionArray));
             if (option.isCorrect) dispatch(setScoreInStore(score + 1));
+            setQuestionAttempted(true);
             setTimeout(() => {
                 goToNextQuestion();
-            }, 200);
+                setQuestionAttempted(false);
+                // Delaying for button and transition animation
+            }, 400);
             if (!quizTaken) setQuestionsAttempted(questionsAttempted + 1);
         }
     }
@@ -80,22 +97,40 @@ const Quiz: FC = () => {
         optionsChosen.forEach(x => { if (x) count++; })
         return (questionsAttempted !== 0 && questionNumber < questionsAttempted) || count === questions.length;
     }
+debugger;
+console.log(cardDataStack);
+console.log(questionOrder);
+console.log(questions[questionOrder[questionNumber]].options);
 
     return (
         <div className="page">
             <main className="page-container flex flex-col">
-                <section className="px-6 mt-10">
+                <section className="px-6 mt-10 grow-0">
                     <div className="flex justify-between">
-                        <button aria-label="previous question" onClick={goToPrevQuestion} className={`${questionNumber ? "inline" : "invisible"} h-fit w-fit self-center`}>
-                            <img src={Left} className="h-4 w-4" alt="left-arrow" />
-                        </button>
-                        <div><span className="font-semibold text-2xl">{formatNumber(questionNumber + 1)}</span><span className="text-slate-200">/ {questionNumberString}</span></div>
+                        <ButtonArrow
+                            imgSrc={Left}
+                            label="prev question"
+                            imgLabel="left arrow"
+                            onClick={goToPrevQuestion}
+                            className={`${questionNumber ? "inline" : "invisible"}`}
+                            tabIndex={0}
+                        />
 
-                        <button aria-label="next question" onClick={goToNextQuestion}
-                            className={`${showForwardButton() ? "inline-block" : "invisible"} h-fit w-fit self-center`}>
-                            <img src={Right} className="h-4 w-4" alt="right-arrow" />
-                        </button>
+                        <div>
+                            <span className="font-semibold text-2xl">{formatNumber(questionNumber + 1)}</span>
+                            <span className="text-slate-200">/ {questionNumberString}</span>
+                        </div>
+
+                        <ButtonArrow
+                            imgSrc={Right}
+                            label="next question"
+                            imgLabel="right arrow"
+                            onClick={goToNextQuestion}
+                            className={`${showForwardButton() ? "inline-block" : "invisible"}`}
+                            tabIndex={1}
+                        />
                     </div>
+
                     <div>
                         <progress
                             max={questions.length}
@@ -106,15 +141,17 @@ const Quiz: FC = () => {
                     </div>
                 </section>
 
-                <section className="px-6">
-                    <Question question={questions[questionOrder[questionNumber]].question} />
+                <section className="px-6 overflow-hidden h-72 grow-0">
+                    <QuestionsStack questions={cardDataStack} questionAnswered={questionAttempted} />
                 </section>
-                <section className="bg-primary bg-opacity-94 px-4 pt-16 pb-4 overflow-auto ::-webkit-scrollbar-track flex-grow">
+                <section className="bg-primary px-4 pt-12 pb-4 overflow-y-hidden flex-grow shrink">
                     <Options
                         options={questions[questionOrder[questionNumber]].options}
                         handleOptionClick={handleOptionClick}
                         optionsOrder={optionsOrderArray[questionOrder[questionNumber]]}
                         optionChosen={optionsChosen[questionNumber]}
+                        questionAnswered={questionAttempted}
+                        quizTaken={quizTaken}
                     />
                 </section>
             </main>
@@ -123,5 +160,3 @@ const Quiz: FC = () => {
 }
 
 export default Quiz;
-
-

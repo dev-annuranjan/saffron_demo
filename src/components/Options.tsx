@@ -6,16 +6,20 @@ type OptionsProps = {
     options: OptionType[];
     optionsOrder: number[];
     optionChosen: null | string;
+    questionAnswered: boolean;
+    quizTaken: boolean;
 }
 
-const Options: FC<OptionsProps> = ({ options, handleOptionClick, optionsOrder, optionChosen }) => {
-    return (<ul className="align-middle">
+const Options: FC<OptionsProps> = ({ options, handleOptionClick, optionsOrder, optionChosen, questionAnswered, quizTaken }) => {
+    return (<ul className={`${questionAnswered ? "optionsExiting" : ""} h-72`}>
         {optionsOrder.map((idx, index) => <Option
             key={index}
             index={idx}
             option={options[idx]}
             handleOptionClick={handleOptionClick}
-            optionChosen={optionChosen} />)}
+            optionChosen={optionChosen}
+            questionAnswered={questionAnswered}
+            quizTaken={quizTaken} />)}
     </ul>)
 }
 

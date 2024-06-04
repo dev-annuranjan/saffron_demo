@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPageNumber } from "../redux/appSlice";
 import { RootState } from "../redux/store";
 import { formatNumber } from "../utility/randomArray";
+import Button from "../components/Button";
 
 const Result: FC = () => {
     const dispatch = useDispatch();
@@ -10,19 +11,29 @@ const Result: FC = () => {
 
     return (
         <div className="page">
-            <main className="page-container h-screen bg-primary relative">
-                <button
+            <main className="page-container h-[48rem] bg-primary relative">
+                <Button
+                    className="mt-24 p-4 rounded-full text-primary bg-secondary"
+                    label="Go Back"
+                    tabIndex={0}
                     onClick={() => dispatch(setPageNumber(1))}
-                    className="button-hover-effect bg-secondary mt-24 p-4 rounded-full text-primary"
-                >Go Back</button>
+                >Go Back</Button>
+
                 <section className="text-center text-secondary font-semibold mx-24 my-24">
                     <p className="my-4">YOUR SCORE</p>
                     <p className="">
-                        <span className="text-6xl">{formatNumber(score)}</span><span className="mx-2">/</span> <span className="text-4xl">{formatNumber(totalScore)}</span>
+                        <span className="text-6xl">{formatNumber(score)}</span>
+                        <span className="mx-2">/</span>
+                        <span className="text-4xl">{formatNumber(totalScore)}</span>
                     </p>
                 </section>
-                <section className="text-secondary text-xs absolute bottom-16 left-0 w-full text-center">
-                    <p>Refresh to play again</p>
+
+                <section className="absolute bottom-16 left-0 w-full text-center">
+                    <Button
+                        className="text-secondary text-xs p-4 shadow-none hover:scale-100"
+                        label="Refresh Page"
+                        onClick={() => window.location.reload()}
+                    >Refresh to play again</Button>
                 </section>
             </main>
         </div>

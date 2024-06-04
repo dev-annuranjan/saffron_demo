@@ -8,6 +8,7 @@ export default {
             secondary: "rgb(var(--color-secondary) / <alpha-value>)",
             accent1: "rgb(var(--color-accent1)/ <alpha-value>)",
             accent2: "rgb(var(--color-accent2) / <alpha-value>)",
+            wrong: "rgb(var(--color-wrong) / <alpha-value>)",
         },
     },
     plugins: [],
