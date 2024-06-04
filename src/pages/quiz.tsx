@@ -97,10 +97,6 @@ const Quiz: FC = () => {
         optionsChosen.forEach(x => { if (x) count++; })
         return (questionsAttempted !== 0 && questionNumber < questionsAttempted) || count === questions.length;
     }
-debugger;
-console.log(cardDataStack);
-console.log(questionOrder);
-console.log(questions[questionOrder[questionNumber]].options);
 
     return (
         <div className="page">
