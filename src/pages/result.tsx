@@ -30,7 +30,7 @@ const Result: FC = () => {
 
                 <section className="absolute bottom-16 left-0 w-full text-center">
                     <Button
-                        className="text-secondary text-xs p-4 shadow-none hover:scale-100"
+                        className="text-secondary text-xs p-4 shadow-none"
                         label="Refresh Page"
                         onClick={() => window.location.reload()}
                     >Refresh to play again</Button>

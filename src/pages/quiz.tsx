@@ -140,7 +140,7 @@ const Quiz: FC = () => {
                 <section className="px-6 overflow-hidden h-72 grow-0">
                     <QuestionsStack questions={cardDataStack} questionAnswered={questionAttempted} />
                 </section>
-                <section className="bg-primary px-4 pt-12 pb-4 overflow-y-hidden flex-grow shrink">
+                <section className="bg-primary px-4 pt-12 pb-4 overflow-y-auto flex-grow shrink">
                     <Options
                         options={questions[questionOrder[questionNumber]].options}
                         handleOptionClick={handleOptionClick}
